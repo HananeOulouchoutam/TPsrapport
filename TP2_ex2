@@ -1,0 +1,26 @@
+% Fréquences des notes de la gamme
+frequencies = [262, 294, 330, 349, 392, 440, 494, 523];
+
+% Durée de chaque note (en secondes)
+duration = 1.0;
+
+% Fréquence d'échantillonnage
+sampling_frequency = 8192;
+
+  % Nombre d'échantillons par note
+  %int32 fonction  permet de s'assurer que num_samples est un entier et non pas un nombre à virgule flottante.
+ num_samples = duration * sampling_frequency;
+
+% Tableau pour stocker le signal généré
+signal = zeros(1, num_samples * length(frequencies));
+
+% Génération du signal de la gamme
+for i = 1:length(frequencies)
+  signal((i-1)*num_samples+1:i*num_samples) = sin(2*pi*frequencies(i)*(0:num_samples-1)/sampling_frequency);
+end
+
+% Reproduction du signal
+sound(signal, sampling_frequency);
+
+% Attente de la fin de la reproduction
+pause(duration * length(frequencies));
