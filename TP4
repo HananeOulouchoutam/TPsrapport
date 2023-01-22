@@ -1,0 +1,41 @@
+clear all
+close all
+clc
+%%
+load("ecg.mat");
+x=ecg;
+
+fs=500;
+N=length(x)
+ts=1/fs
+%%tracer ECG en fonction de temps
+t=(0:N-1)*ts;
+subplot(2,2,1)
+plot(t,x);
+title("le signal ECG");
+%%le spectre Amplitude
+ y = fft(x);
+ f = (-N/2:N/2-1)*(fs/N);
+subplot(2,2,2)
+plot(f,fftshift(abs(y)))
+title("spectre Amplitude")
+
+%%spectre Amplitude centré
+
+%%suppression du bruit des movements de corps
+
+h = ones(size(x));
+fh = 0.5;
+index_h = ceil(fh*N/fs);
+h(1:index_h)=0;
+h(N-index_h+1:N)=0;
+
+filtre=h.*y;
+filtre_temp=ifft(filtre,"symmetric");
+subplot(2,2,3)
+plot(t,x-filtre_temp);
+title("signal filtré")
+
+
+ subplot(2,2,4)
+ plot(f,fftshift(abs(fft(filtre_temp)));
