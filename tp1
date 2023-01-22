@@ -1,1 +1,60 @@
-gav ,ku ga
+clear all
+close all 
+clc
+
+
+%% 
+f1=440;
+f2=550;
+f3=2500;
+N=5000;
+fe=10000;
+te=1/fe;
+t=(0:N-1)*te;
+% r f qui correspond à l'échantillonnage du signal dans l'espace fréquentiel
+
+fsh=(0:N-1)*(fe/N);
+fshift=(-N/2:(N/2)-1)*(fe/N);
+% N??par pas de 1/(nTe) où n est le nombre de points constituant le signal x(t).
+
+
+%%
+signal=1.2*cos(2*pi*f1*t+1.2)+3*cos(2*pi*f2*t)+0.6*cos(2*pi*f3*t);
+% plot(t,signal);
+%%
+signalTf=fft(signal);
+% on utilise abs Just pour rendre les valeurs positivent
+%plot(fsh,abs(signalTf));
+%%
+signalFshif=fftshift(abs(signalTf));
+% plot(fshift,signalFshif);
+%%
+% la partie de Bruit 
+noise=randn(size(signal));
+% plot(noise);
+%  la commande sound pour écouter
+% sound(noise)
+%%
+xnoise= noise+signal;
+ynoise=fft(xnoise);
+% sound(xnoise)
+% la Ftransfrmee de Fourrier de signal bruite
+% plot(fsh,abs(ynoise));
+% plot(fshift,fftshift(abs(ynoise)));
+%%
+% le Filtrae pass_bas 
+pass_bas = zeros(size(signal));
+
+fc = 2000; %hz la frequence qui on veut la Supprimer
+%c est quoi cet indexe de coupere et Comment il le calcul
+index_fc = ceil((fc*N)/fe);
+pass_bas(1:index_fc)= 1;
+pass_bas(N-index_fc+1:N)= 1;
+% plot(pass_bas);
+
+x_filtree_freq = pass_bas .*signalTf;
+x_filtree_temp = ifft(x_filtree_freq,"symmetric");  
+
+% plot(t,x_filtree_temp);
+% plot(fsh,abs(x_filtree_freq));
+% plot(fshift, fftshift(abs(fft(x_filtree_temp))));
