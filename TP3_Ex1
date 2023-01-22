@@ -1,0 +1,73 @@
+clear all 
+close all 
+clc
+
+
+
+%%
+% Definition des variables et de signal
+
+te = 1e-4 ;
+fe = 1/te ;
+t = 0:te:5-te ;
+N = length(t);
+f = (0:N-1)*(fe/N);
+fshift = (-N/2:N/2-1)*fe/N;
+
+%%
+% Definition de la fonction xt
+xt = sin(2*pi*500*t)+ sin(2*pi*400*t)+ sin(2*pi* 50*t) ;
+% plot(t,xt);
+%%
+tansf = fft(xt);
+% plot(fshift,fftshift(abs(tansf)/N)*2)
+
+%%
+% la fonction de transmmitance
+
+K = 1 ; fc1 = 32 ; fc2 = 150 ; fc3 = 1500;
+
+H1 = (K*1j*f/fc1)./(1+1j*f/fc1) ;
+H2 = (K*1j*f/fc2)./(1+1j*f/fc2) ; 
+H3 =(K*1j*f/fc3)./(1+1j*f/fc3) ;
+
+G1 = 20*log(abs(H1));
+G2 = 20*log(abs(H2));
+G3 = 20*log(abs(H3));
+
+phi1 = angle(H1);
+phi2 = angle(H2); 
+phi3 = angle(H3);
+
+% subplot(121)
+semilogx(f,G1,'g',f,G2,'r',f,G3,'b')
+% subplot(122)
+% semilogx(f,phi1,'g',f,phi2,'r',f,phi3,'b')
+
+% yt1 = tansf.*H1 ; 
+% yt2 = tansf.*H2 ; 
+% yt3 = tansf.*H3 ;
+% 
+% Yt1 =ifft(yt1,'symmetric');
+% Yt2 =ifft(yt2,'symmetric'); 
+% Yt3 =ifft(yt3,'symmetric');
+% 
+% % plot(t, Yt1) 
+% % plot(t, Yt2) 
+% % plot(t, Yt3) 
+% 
+% yyt1=fft(Yt1)
+% yyt2=fft(Yt2)
+% yyt3=fft(Yt3)
+%% 
+% plot(fshift,fftshift(abs(yyt1)/N)*2);
+% plot(fshift,fftshift(abs(yyt2)/N)*2);
+% plot(fshift,fftshift(abs(yyt3)/N)*2)
+ 
+%  tansf = fft(xt);
+
+% % plot(t,xt)
+% yt1 = tansf.*H1
+% inver=ifft(yt1,'symmetric');
+
+%  plot(fshift,fftshift(abs(fft(inver))/N)*2);
